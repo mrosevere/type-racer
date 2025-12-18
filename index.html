@@ -43,7 +43,7 @@
 
     <!-- Main Content -->
     <main class="container mb-5">
-        <div class="row g-4">
+        <div class="row g-4 align-items-start">
             <!-- Left Column: Test Area -->
             <div class="col-lg-8">
                 <!-- Difficulty Selector -->
@@ -82,7 +82,7 @@
 
             <!-- Right Column: Results Panel -->
             <div class="col-lg-4">
-                <div class="card border-warning border-3 p-4">
+                <div class="card border-warning border-3 p-4 mb-4">
                     <h3 class="text-center mb-4 fw-700">Results</h3>
                     <div class="text-center">
                         <div class="mb-3">
@@ -100,6 +100,25 @@
                         <div>
                             <label class="text-muted d-block">Accuracy</label>
                             <p class="fs-5 fw-600" id="resultAccuracy">0%</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Best Results -->
+                <div class="card border-success border-2 p-4">
+                    <h3 class="text-center mb-4 fw-700">Best Results</h3>
+                    <div>
+                        <div class="mb-3">
+                            <h6 class="text-success mb-2">Easy</h6>
+                            <p class="small text-muted mb-0" id="bestEasy">No record yet</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6 class="text-success mb-2">Medium</h6>
+                            <p class="small text-muted mb-0" id="bestMedium">No record yet</p>
+                        </div>
+                        <div>
+                            <h6 class="text-success mb-2">Hard</h6>
+                            <p class="small text-muted mb-0" id="bestHard">No record yet</p>
                         </div>
                     </div>
                 </div>
