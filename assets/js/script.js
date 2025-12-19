@@ -111,7 +111,7 @@ function renderSample() {
 function setRunningState(running) {
 	isRunning = running;
 	// startBtn.disabled = running;      // Can't start twice
-	stopBtn.disabled = !running;      // Can only stop while running
+	// stopBtn.disabled = !running;      // Can only stop while running
 	retryBtn.disabled = running;      // Can't retry while running
 	userInput.disabled = !running;    // Can only type while running
 }
@@ -124,9 +124,6 @@ function setRunningState(running) {
 function startTest() {
 	if (isRunning) return; // Already started
 	
-	// Get a new sample and show it
-	pickSample();
-	renderSample();
 	setRunningState(true);
 	
 	// Reset the timer and input
@@ -156,19 +153,24 @@ function stopTest() {
 
 // Reset everything to start fresh
 function resetTest() {
-	clearInterval(timerId);
+	// Stop the test first if it's running
+	if (isRunning) {
+		clearInterval(timerId);
+		isRunning = false;
+	}
 	
+	clearInterval(timerId);
 	isRunning = false;
 	startTimeMs = 0;
 	elapsedMs = 0;
 	userInput.value = '';
-	userInput.placeholder = 'Start typing to begin the test...';  // Update placeholder
-    userInput.disabled = false;  // Keep enabled for auto-start
+	userInput.placeholder = 'Start typing to begin the test...';
 	
 	updateResults();
 	pickSample();
 	renderSample();
 	setRunningState(false);
+	userInput.disabled = false;  // Keep enabled for auto-start
 }
 
 // ========================================
@@ -296,6 +298,14 @@ function setupEventListeners() {
 	retryBtn?.addEventListener('click', resetTest);
 	userInput?.addEventListener('input', handleTyping);
 	
+	// Stop test when Enter key is pressed
+	userInput?.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter' && isRunning) {
+			e.preventDefault(); // Prevent newline in textarea
+			stopTest();
+		}
+	});
+	
 	difficultySelect?.addEventListener('change', (e) => {
 		const newDifficulty = e.target.value;
 		resultLevel.textContent = newDifficulty.charAt(0).toUpperCase() + newDifficulty.slice(1);
@@ -307,7 +317,7 @@ function setupEventListeners() {
 document.addEventListener('DOMContentLoaded', () => {
 	// Set initial state
 	setRunningState(false);
-	stopBtn.disabled = true;
+	// stopBtn.disabled = true;
 	retryBtn.disabled = false;
 	userInput.disabled = false;  // Enable input right away
     userInput.placeholder = 'Start typing to begin the test...';
