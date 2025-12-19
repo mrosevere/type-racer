@@ -110,7 +110,7 @@ function renderSample() {
 // Turn buttons on/off based on whether test is running
 function setRunningState(running) {
 	isRunning = running;
-	startBtn.disabled = running;      // Can't start twice
+	// startBtn.disabled = running;      // Can't start twice
 	stopBtn.disabled = !running;      // Can only stop while running
 	retryBtn.disabled = running;      // Can't retry while running
 	userInput.disabled = !running;    // Can only type while running
@@ -162,7 +162,8 @@ function resetTest() {
 	startTimeMs = 0;
 	elapsedMs = 0;
 	userInput.value = '';
-	userInput.placeholder = 'Click the start button to begin the test';
+	userInput.placeholder = 'Start typing to begin the test...';  // Update placeholder
+    userInput.disabled = false;  // Keep enabled for auto-start
 	
 	updateResults();
 	pickSample();
@@ -210,6 +211,13 @@ function updateResults() {
 
 // Update colors while user is typing
 function handleTyping() {
+
+	// Auto-start the test on first keystroke
+    if (!isRunning && userInput.value.length > 0) {
+        startTest();
+        return; // Let the next input event handle the highlighting
+    }
+
 	const typedText = userInput.value;
 	const typedWords = typedText.length ? typedText.split(/\s+/) : [];
 	
@@ -283,7 +291,7 @@ function displayBestResults() {
 
 // Connect buttons to functions
 function setupEventListeners() {
-	startBtn?.addEventListener('click', startTest);
+	// startBtn?.addEventListener('click', startTest);
 	stopBtn?.addEventListener('click', stopTest);
 	retryBtn?.addEventListener('click', resetTest);
 	userInput?.addEventListener('input', handleTyping);
@@ -301,7 +309,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	setRunningState(false);
 	stopBtn.disabled = true;
 	retryBtn.disabled = false;
-	userInput.disabled = true;
+	userInput.disabled = false;  // Enable input right away
+    userInput.placeholder = 'Start typing to begin the test...';
 	
 	// Show first sample and best results
 	pickSample();
